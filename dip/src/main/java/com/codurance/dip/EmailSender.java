@@ -1,7 +1,12 @@
 package com.codurance.dip;
 
-public class EmailSender {
-    public void send(Email email) {
-        System.out.print("To:"+email.getTo()+", Subject: "+email.getSubject()+", Message: "+email.getMessage());
+public class EmailSender implements Sender{
+    @Override
+    public void send(Employee employee) {
+        String message = String.format("To:%1s, Subject: Happy birthday!, Message: Happy birthday, dear %2s!",
+                employee.getEmail(), employee.getFirstName());
+
+
+        System.out.println(message);
     }
 }

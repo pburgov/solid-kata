@@ -1,8 +1,8 @@
 package com.codurance.dip;
 
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 
@@ -26,11 +26,18 @@ public class BirthdayGreeterShould {
     @Mock
     private Clock clock;
 
-    @InjectMocks
     private BirthdayGreeter birthdayGreeter;
+    private final ByteArrayOutputStream consoleContent = new ByteArrayOutputStream();
+
+    @Before
+    public void setUp(){
+
+        Sender sender = new EmailSender();
+        birthdayGreeter = new BirthdayGreeter(employeeRepository, clock, sender);
+
+    }
 
 
-    private ByteArrayOutputStream consoleContent = new ByteArrayOutputStream();
 
     @Test
     public void should_send_greeting_email_to_employee() {
@@ -41,7 +48,7 @@ public class BirthdayGreeterShould {
 
         birthdayGreeter.sendGreetings();
 
-        String actual = consoleContent.toString();
+        String actual = consoleContent.toString().trim();
         assertThat(actual)
                 .isEqualTo("To:" + employee.getEmail() + ", Subject: Happy birthday!, Message: Happy birthday, dear " + employee.getFirstName()+"!");
 
